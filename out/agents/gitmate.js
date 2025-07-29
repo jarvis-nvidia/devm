@@ -1,0 +1,98 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GitMate = void 0;
+class GitMate {
+    constructor(ai) {
+        this.ai = ai;
+    }
+    async generateCommitMessage(context) {
+        try {
+            const commitMessage = await this.ai.generateCommitMessage(context);
+            return `# Generated Commit Message\n\n${commitMessage}`;
+        }
+        catch (error) {
+            throw new Error(`Failed to generate commit message: ${error}`);
+        }
+    }
+    async analyzeChanges(context) {
+        try {
+            const analysis = await this.ai.analyzeContext(context);
+            return `# Git Changes Analysis\n\n${analysis}`;
+        }
+        catch (error) {
+            throw new Error(`Failed to analyze changes: ${error}`);
+        }
+    }
+    async createChangelog(context) {
+        try {
+            const changelog = await this.generateChangelogContent(context);
+            return `# Changelog\n\n${changelog}`;
+        }
+        catch (error) {
+            throw new Error(`Failed to create changelog: ${error}`);
+        }
+    }
+    async reviewChanges(context) {
+        try {
+            const review = await this.generateCodeReview(context);
+            return `# Code Review\n\n${review}`;
+        }
+        catch (error) {
+            throw new Error(`Failed to review changes: ${error}`);
+        }
+    }
+    async generateChangelogContent(context) {
+        const prompt = `Generate a changelog entry based on the following context:
+
+**Project**: ${context.projectStructure}
+**Recent Changes**: ${context.recentChanges}
+**Git Status**: ${context.gitStatus}
+
+Please provide:
+1. A summary of changes
+2. New features added
+3. Bug fixes
+4. Breaking changes (if any)
+5. Migration notes (if needed)
+
+Format as a proper changelog entry.`;
+        const response = await this.ai['makeRequest'](prompt);
+        if (response.success && response.content) {
+            return response.content;
+        }
+        else {
+            return 'Unable to generate changelog content.';
+        }
+    }
+    async generateCodeReview(context) {
+        const prompt = `Perform a code review based on the following context:
+
+**Current File**: ${context.currentFile}
+**Language**: ${context.language}
+**Code**:
+\`\`\`${context.language}
+${context.currentCode}
+\`\`\`
+
+**Project Context**: ${context.projectStructure}
+
+Please provide:
+1. Code quality assessment
+2. Potential issues or bugs
+3. Performance considerations
+4. Security concerns
+5. Best practices recommendations
+6. Suggested improvements
+
+Be thorough but constructive in your review.`;
+        const response = await this.ai['makeRequest'](prompt);
+        if (response.success && response.content) {
+            return response.content;
+        }
+        else {
+            return 'Unable to generate code review.';
+        }
+    }
+}
+exports.GitMate = GitMate;
+//# sourceMappingURL=gitmate.js.map

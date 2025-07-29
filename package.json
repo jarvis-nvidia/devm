@@ -1,0 +1,110 @@
+{
+  "name": "devmind-ai-assistant",
+  "displayName": "DevMind AI Assistant",
+  "description": "Context-aware AI developer assistant powered by Quen 3",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devmind-ai/devmind-vscode-extension.git"
+  },
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:devmind.activate",
+    "onCommand:devmind.analyze",
+    "onCommand:devmind.refactor",
+    "onCommand:devmind.debug",
+    "onCommand:devmind.document",
+    "onCommand:devmind.gitmate"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "devmind.activate",
+        "title": "DevMind: Activate AI Assistant",
+        "category": "DevMind"
+      },
+      {
+        "command": "devmind.analyze",
+        "title": "DevMind: Analyze Current Context",
+        "category": "DevMind"
+      },
+      {
+        "command": "devmind.refactor",
+        "title": "DevMind: Refactor Code",
+        "category": "DevMind"
+      },
+      {
+        "command": "devmind.debug",
+        "title": "DevMind: Debug Issues",
+        "category": "DevMind"
+      },
+      {
+        "command": "devmind.document",
+        "title": "DevMind: Generate Documentation",
+        "category": "DevMind"
+      },
+      {
+        "command": "devmind.gitmate",
+        "title": "DevMind: Git Operations",
+        "category": "DevMind"
+      }
+    ],
+    "configuration": {
+      "title": "DevMind AI Assistant",
+      "properties": {
+        "devmind.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "OpenRouter API Key for Quen 3 access"
+        },
+        "devmind.model": {
+          "type": "string",
+          "default": "qwen/qwen3-32b:free",
+          "description": "Quen 3 model variant to use"
+        },
+        "devmind.enableContextAnalysis": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic context analysis"
+        },
+        "devmind.enableGitIntegration": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Git-based historical memory"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "setup": "node scripts/setup.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0",
+    "@vscode/test-electron": "^2.3.8",
+    "@types/mocha": "^10.0.0",
+    "vsce": "^2.15.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.0",
+    "simple-git": "^3.20.0"
+  }
+}
