@@ -60,7 +60,7 @@ Please provide:
 
 Format as a proper changelog entry.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return response.content;
         } else {

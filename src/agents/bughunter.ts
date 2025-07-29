@@ -92,7 +92,7 @@ ${code}
 
 Please provide the corrected code with all issues fixed. Return only the corrected code in a code block.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return this.extractCodeFromResponse(response.content, language);
         } else {
