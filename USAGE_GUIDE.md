@@ -40,15 +40,14 @@
 
 ## ⚙️ **Configuration**
 
-### Step 1: Configure API Key
-1. Open VS Code Settings (Ctrl+,)
-2. Search for "DevMind"
-3. Find "Devmind: Api Key" setting
-4. Enter your OpenRouter API key
-5. Save the settings
+### Step 1: Set Your API Key
+1. Open the Command Palette (Ctrl+Shift+P)
+2. Type "DevMind: Set API Key" and press Enter.
+3. Paste your OpenRouter API key into the input box and press Enter.
+4. Your API key will be stored securely.
 
 ### Step 2: Optional Configuration
-You can also configure these settings:
+You can also configure these settings in your VS Code settings (Ctrl+,):
 - **Model**: Choose Quen 3 model variant (default: `qwen/qwen3-32b:free`)
 - **Enable Context Analysis**: Auto-analyze context (default: true)
 - **Enable Git Integration**: Use Git history (default: true)
@@ -106,7 +105,8 @@ function processUserData(user) {
 ### Core Commands
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `DevMind: Activate AI Assistant` | Initialize the AI system | First command to run |
+| `DevMind: Set API Key` | Set your OpenRouter API key | Run this command first |
+| `DevMind: Activate AI Assistant` | Initialize the AI system | Run after setting the API key |
 | `DevMind: Analyze Current Context` | Analyze current code context | Run on any code file |
 | `DevMind: Refactor Code` | AI-powered code refactoring | Select code first |
 | `DevMind: Debug Issues` | Find and fix bugs | Run on code with issues |
@@ -129,7 +129,7 @@ function processUserData(user) {
 **Steps**:
 1. Open any code file
 2. Run "DevMind: Analyze Current Context"
-3. A new document opens with analysis including:
+3. A new webview will open with the analysis, including:
    - Code structure overview
    - Quality assessment
    - Performance insights
@@ -137,26 +137,7 @@ function processUserData(user) {
    - Best practices recommendations
 
 **Example Output**:
-```markdown
-# DevMind Context Analysis
-
-## Code Structure
-- Function: calculateTotal (lines 1-7)
-- Function: processUserData (lines 9-22)
-
-## Quality Assessment
-✅ Good: Clear function names
-⚠️  Improve: Add error handling
-✅ Good: Consistent formatting
-
-## Performance Insights
-- Consider using reduce() for calculateTotal
-- Add input validation for processUserData
-
-## Security Considerations
-- Validate user input in processUserData
-- Add type checking for items array
-```
+The analysis will be displayed in a custom webview within VS Code, providing a clean and easy-to-read format.
 
 ### 2. Code Refactoring
 **Purpose**: Improve code quality, readability, and performance
@@ -164,7 +145,7 @@ function processUserData(user) {
 **Steps**:
 1. Select code you want to refactor
 2. Run "DevMind: Refactor Code"
-3. The selected code is replaced with improved version
+3. The selected code is replaced with the improved version
 
 **Example Before**:
 ```javascript
@@ -218,30 +199,7 @@ function calculateTotal(items) {
 **Steps**:
 1. Open any code file
 2. Run "DevMind: Generate Documentation"
-3. A new document with detailed documentation is created
-
-**Example Output**:
-```markdown
-# Function Documentation
-
-## calculateTotal
-**Purpose**: Calculates the total price of items in an array
-
-**Parameters**:
-- `items` (Array): Array of objects with price property
-
-**Returns**:
-- `number`: Total price of all items
-
-**Example Usage**:
-```javascript
-const items = [{price: 10}, {price: 20}, {price: 30}];
-const total = calculateTotal(items); // Returns 60
-```
-
-**Dependencies**: None
-**Performance**: O(n) time complexity
-```
+3. A new webview will open with the detailed documentation.
 
 ### 5. Git Operations
 **Purpose**: Smart Git assistance and commit management
@@ -249,24 +207,12 @@ const total = calculateTotal(items); // Returns 60
 **Steps**:
 1. Make changes to your code
 2. Run "DevMind: Git Operations"
-3. Choose from available options:
+3. Choose from the available options:
    - Generate commit message
    - Analyze changes
    - Create changelog
    - Review code changes
-
-**Example Commit Message Generated**:
-```
-feat: improve calculateTotal function with error handling
-
-- Add input validation for items array
-- Add type checking for price property
-- Use reduce() method for better performance
-- Add JSDoc documentation
-- Include error handling for invalid inputs
-
-Breaking changes: Function now throws errors for invalid input
-```
+4. The results will be displayed in a webview.
 
 ---
 
@@ -277,40 +223,39 @@ Breaking changes: Function now throws errors for invalid input
 #### 1. "API key not configured" Error
 **Problem**: Extension can't find your OpenRouter API key
 **Solution**:
-1. Open VS Code Settings (Ctrl+,)
-2. Search "DevMind"
-3. Set the API key in "devmind.apiKey"
-4. Restart VS Code
+1. Open the Command Palette (Ctrl+Shift+P)
+2. Type "DevMind: Set API Key" and press Enter.
+3. Paste your OpenRouter API key into the input box and press Enter.
 
 #### 2. "Failed to connect to Quen 3" Error
 **Problem**: Can't connect to OpenRouter API
 **Solutions**:
 1. Check your internet connection
-2. Verify API key is valid
-3. Check API key has sufficient credits
-4. Ensure model name is correct
+2. Verify your API key is valid by running the "DevMind: Set API Key" command again.
+3. Check your OpenRouter account for any issues.
+4. Ensure the model name in your settings is correct.
 
 #### 3. Extension Not Responding
 **Problem**: Commands don't work
 **Solutions**:
 1. Restart VS Code
-2. Check Developer Console (Help > Toggle Developer Tools)
-3. Verify extension is installed correctly
-4. Try running "DevMind: Activate AI Assistant" first
+2. Check the Developer Console (Help > Toggle Developer Tools) for errors.
+3. Verify the extension is installed correctly.
+4. Try running "DevMind: Activate AI Assistant" first.
 
 #### 4. No AI Response
 **Problem**: Commands run but no AI response
 **Solutions**:
-1. Check network connection
-2. Verify API key configuration
-3. Check VS Code Output panel for errors
-4. Try a different command
+1. Check your network connection.
+2. Verify your API key is configured correctly.
+3. Check the VS Code Output panel for errors.
+4. Try a different command.
 
 ### Debug Mode
 1. Open Command Palette (Ctrl+Shift+P)
 2. Run "Developer: Toggle Developer Tools"
-3. Check Console tab for error messages
-4. Check Network tab for API calls
+3. Check the Console tab for error messages
+4. Check the Network tab for API calls
 
 ### Logs Location
 Extension logs can be found in:
