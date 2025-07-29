@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as vscode from 'vscode';
 import { ContextData } from '../types/context';
+import { Cache } from '../cache';
 
 export interface AIResponse {
     success: boolean;
@@ -17,18 +18,23 @@ export class DevMindAI {
     private apiKey: string = '';
     private model: string = 'qwen/qwen3-32b:free';
     private baseUrl: string = 'https://openrouter.ai/api/v1/chat/completions';
+    private cache: Cache;
+
+    constructor(private secretStorage: vscode.SecretStorage) {
+        this.cache = new Cache();
+    }
 
     async initialize(): Promise<InitializationStatus> {
         try {
-            // Get API key from configuration
+            // Get API key from secret storage
+            this.apiKey = await this.secretStorage.get('devmind.apiKey') || '';
             const config = vscode.workspace.getConfiguration('devmind');
-            this.apiKey = config.get('apiKey', '');
             this.model = config.get('model', 'qwen/qwen3-32b:free');
 
             if (!this.apiKey) {
                 return {
                     success: false,
-                    error: 'OpenRouter API key not configured. Please set it in the extension settings.'
+                    error: 'OpenRouter API key not configured. Please run the "DevMind: Set API Key" command.'
                 };
             }
 
@@ -106,6 +112,11 @@ export class DevMindAI {
     }
 
     private async makeRequest(prompt: string): Promise<AIResponse> {
+        const cachedResponse = this.cache.get(prompt);
+        if (cachedResponse) {
+            return { success: true, content: cachedResponse };
+        }
+
         try {
             const response = await axios.post(
                 this.baseUrl,
@@ -134,6 +145,7 @@ export class DevMindAI {
 
             const content = response.data.choices?.[0]?.message?.content;
             if (content) {
+                this.cache.set(prompt, content);
                 return { success: true, content };
             } else {
                 return { success: false, error: 'No response content received' };

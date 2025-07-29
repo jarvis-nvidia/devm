@@ -66,7 +66,7 @@ Please provide:
 
 Choose the most appropriate CI/CD platform based on the project type.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return response.content;
         } else {
@@ -96,7 +96,7 @@ Please provide:
 
 Make it production-ready and follow Docker best practices.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return response.content;
         } else {
@@ -126,7 +126,7 @@ Please provide:
 
 Choose the most appropriate infrastructure platform and provide complete configuration.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return response.content;
         } else {
@@ -156,7 +156,7 @@ Please provide:
 
 Make deployment scripts robust and include error handling.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return response.content;
         } else {

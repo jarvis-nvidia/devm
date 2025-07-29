@@ -64,7 +64,7 @@ Please include:
 
 Make it professional and comprehensive.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return response.content;
         } else {
@@ -94,7 +94,7 @@ Please provide:
 
 Format as proper API documentation.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return response.content;
         } else {
@@ -123,7 +123,7 @@ Please add:
 
 Return the code with inline comments in a code block.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return this.extractCodeFromResponse(response.content, language);
         } else {

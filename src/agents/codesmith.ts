@@ -77,7 +77,7 @@ Please provide the optimized code with:
 
 Return only the optimized code in a code block.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return response.content;
         } else {
@@ -105,7 +105,7 @@ Please provide:
 
 Use appropriate testing framework for ${language}.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return response.content;
         } else {
@@ -133,7 +133,7 @@ Please provide:
 
 Be specific and actionable in your suggestions.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return response.content;
         } else {

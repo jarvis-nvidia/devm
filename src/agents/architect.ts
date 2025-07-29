@@ -66,7 +66,7 @@ Please provide:
 
 Make it comprehensive and actionable.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return response.content;
         } else {
@@ -96,7 +96,7 @@ Please suggest:
 
 Be specific and provide practical examples.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return response.content;
         } else {
@@ -128,7 +128,7 @@ Please analyze:
 
 Provide actionable insights and specific recommendations.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return response.content;
         } else {
@@ -158,7 +158,7 @@ Please provide:
 
 Make recommendations specific to the project type and technology stack.`;
 
-        const response = await this.ai['makeRequest'](prompt);
+        const response = await (this.ai as any).makeRequest(prompt);
         if (response.success && response.content) {
             return response.content;
         } else {

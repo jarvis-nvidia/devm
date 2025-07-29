@@ -7,18 +7,33 @@ import { BugHunter } from './agents/bughunter';
 import { DocGuru } from './agents/docguru';
 import { Architect } from './agents/architect';
 import { DevFlow } from './agents/devflow';
+import { DevMindWebView } from './webview';
 
 let devMindAI: DevMindAI;
 let contextAnalyzer: ContextAnalyzer;
+let webview: DevMindWebView;
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('DevMind AI Assistant is now active!');
 
     // Initialize core components
-    devMindAI = new DevMindAI();
+    devMindAI = new DevMindAI(context.secrets);
     contextAnalyzer = new ContextAnalyzer();
+    webview = new DevMindWebView();
 
     // Register commands
+    let setApiKeyCommand = vscode.commands.registerCommand('devmind.setApiKey', async () => {
+        const apiKey = await vscode.window.showInputBox({
+            prompt: 'Enter your OpenRouter API Key',
+            password: true,
+            ignoreFocusOut: true,
+        });
+        if (apiKey) {
+            await context.secrets.store('devmind.apiKey', apiKey);
+            vscode.window.showInformationMessage('API Key stored successfully.');
+        }
+    });
+
     let activateCommand = vscode.commands.registerCommand('devmind.activate', async () => {
         await activateDevMind();
     });
@@ -44,6 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(
+        setApiKeyCommand,
         activateCommand,
         analyzeCommand,
         refactorCommand,
@@ -67,10 +83,13 @@ async function activateDevMind() {
                 await analyzeContext();
             }
         } else {
-            vscode.window.showErrorMessage(`❌ Failed to initialize DevMind: ${status.error}`);
+            const errorMsg = `Failed to initialize DevMind: ${status.error}. Please check your API key and network connection.`;
+            vscode.window.showErrorMessage(errorMsg);
         }
-    } catch (error) {
-        vscode.window.showErrorMessage(`❌ Error initializing DevMind: ${error}`);
+    } catch (error: any) {
+        const errorMsg = `Error initializing DevMind: ${error.message}. Please check the console for more details.`;
+        vscode.window.showErrorMessage(errorMsg);
+        console.error(error);
     }
 }
 
@@ -87,16 +106,13 @@ async function analyzeContext() {
         const context = await contextAnalyzer.analyzeCurrentContext(editor);
         const analysis = await devMindAI.analyzeContext(context);
 
-        // Display analysis in a new document
-        const document = await vscode.workspace.openTextDocument({
-            content: `# DevMind Context Analysis\n\n${analysis}`,
-            language: 'markdown'
-        });
+        // Display analysis in a webview
+        webview.createOrShow(analysis, 'DevMind Context Analysis');
 
-        await vscode.window.showTextDocument(document);
-
-    } catch (error) {
-        vscode.window.showErrorMessage(`❌ Error analyzing context: ${error}`);
+    } catch (error: any) {
+        const errorMsg = `Error analyzing context: ${error.message}. Please check your API key and network connection.`;
+        vscode.window.showErrorMessage(errorMsg);
+        console.error(error);
     }
 }
 
@@ -123,8 +139,10 @@ async function refactorCode() {
 
         vscode.window.showInformationMessage('✅ Code refactored successfully!');
 
-    } catch (error) {
-        vscode.window.showErrorMessage(`❌ Error refactoring code: ${error}`);
+    } catch (error: any) {
+        const errorMsg = `Error refactoring code: ${error.message}. Please check your API key and network connection.`;
+        vscode.window.showErrorMessage(errorMsg);
+        console.error(error);
     }
 }
 
@@ -161,8 +179,10 @@ async function debugIssues() {
             vscode.window.showInformationMessage(`🔍 Found ${issues.length} potential issues. Check the Problems panel.`);
         }
 
-    } catch (error) {
-        vscode.window.showErrorMessage(`❌ Error debugging code: ${error}`);
+    } catch (error: any) {
+        const errorMsg = `Error debugging code: ${error.message}. Please check your API key and network connection.`;
+        vscode.window.showErrorMessage(errorMsg);
+        console.error(error);
     }
 }
 
@@ -181,21 +201,15 @@ async function generateDocumentation() {
             await contextAnalyzer.analyzeCurrentContext(editor)
         );
 
-        // Create documentation file
-        const docFileName = `${editor.document.fileName}.md`;
-        const docUri = vscode.Uri.file(docFileName);
-
-        const docDocument = await vscode.workspace.openTextDocument({
-            content: documentation,
-            language: 'markdown'
-        });
-
-        await vscode.window.showTextDocument(docDocument);
+        // Display documentation in a webview
+        webview.createOrShow(documentation, 'DevMind Documentation');
 
         vscode.window.showInformationMessage('📚 Documentation generated successfully!');
 
-    } catch (error) {
-        vscode.window.showErrorMessage(`❌ Error generating documentation: ${error}`);
+    } catch (error: any) {
+        const errorMsg = `Error generating documentation: ${error.message}. Please check your API key and network connection.`;
+        vscode.window.showErrorMessage(errorMsg);
+        console.error(error);
     }
 }
 
@@ -237,16 +251,13 @@ async function gitOperations() {
                 return;
         }
 
-        // Show result in new document
-        const document = await vscode.workspace.openTextDocument({
-            content: `# DevMind Git Analysis\n\n${result}`,
-            language: 'markdown'
-        });
+        // Show result in a webview
+        webview.createOrShow(result, 'DevMind Git Analysis');
 
-        await vscode.window.showTextDocument(document);
-
-    } catch (error) {
-        vscode.window.showErrorMessage(`❌ Error performing Git operation: ${error}`);
+    } catch (error: any) {
+        const errorMsg = `Error performing Git operation: ${error.message}. Please check your API key and network connection.`;
+        vscode.window.showErrorMessage(errorMsg);
+        console.error(error);
     }
 }
 
